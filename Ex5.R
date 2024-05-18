@@ -4,20 +4,32 @@ set.seed(1950)  # Define a semente para reproduzibilidade
 r <- 300  # número de amostras
 m <- 170  # número de valores de T por amostra
 n <- 23   # tamanho da amostra
-T_sample <- matrix(rnorm(r * m), nrow = r, ncol = m)
+
+
+#matriz de amostras
+T_sample <- matrix(0,nrow = r, ncol = m)
 
 proportions <- numeric(r)
 
 for (i in 1:r) {
-  T_values <- sqrt(n) * (T_sample[i, 1] / sqrt(sum(T_sample[i, -1]^2)))
-  proportions[i] <- mean(T_values <= 1.5)
+  
+  #calcular uma amostra de valores
+  T_values <- matrix(rnorm(m * (n+1)), nrow = m, ncol = (n+1))
+  for (j in 1:m){
+    T_value <- sqrt(n) * (T_values[j, 1] / sqrt(sum(T_values[j, 2:(n+1)]^2)))
+    
+    # cada linha do T_sample é uma amostra
+    T_sample[i,j] <- T_value
+  }
+  # para cada amostra calcular a proporção de valores <= 1.5
+  linha <- T_sample[i, ]
+  proportions[i] <- mean( linha <= 1.5 )
 }
 
-mean_proportion <- mean(proportions)
+p <- mean(proportions)
 probability <- pt(1.5, df = n)
 
-difference <- abs(mean_proportion - probability) * 100
+difference <- abs(p - probability) * 100
 result <- round(difference, 5)
 
 result
-
