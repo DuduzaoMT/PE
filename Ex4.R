@@ -29,8 +29,6 @@ for (i in 1:n_realizacoes) {
     }
   }
 }
-print(sinais)
-
 # Calculando a proporção de vezes em que é produzido um aviso sonoro sem desligar o sistema
 proporcao <- avisos_sonoros / n_realizacoes
 
